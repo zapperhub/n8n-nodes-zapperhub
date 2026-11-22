@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zapperhub/n8n-nodes-zapperhub.git"
+    "url": "git+https://github.com/zapperhub/n8n-nodes-zapperhub.git"
   },
   "scripts": {
     "build": "n8n-node build",
@@ -32,6 +32,10 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "n8n": {
     "n8nNodesApiVersion": 1,
     "strict": true,
