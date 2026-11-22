@@ -1,44 +1,74 @@
-# n8n-nodes-zapperapi
+# n8n-nodes-zapperhub
 
-Este é o node n8n oficial da ZapperAPI.
+Official [n8n](https://n8n.io/) nodes for [ZapperHub](https://zapperhub.com), the WhatsApp API for
+messages and voice calls, on the official Meta connection (Cloud API) or by QR Code.
 
-[n8n](https://n8n.io/) é uma plataforma [no-code/low-code](https://docs.n8n.io/sustainable-use-license/) de automação de fluxos.
+This package replaces `n8n-nodes-zapperapi`. ZapperAPI is now ZapperHub.
 
-[Instalação](#installation)
+- [Installation](#installation)
+- [Credentials](#credentials)
+- [Nodes](#nodes)
+- [Compatibility](#compatibility)
+- [Resources](#resources)
 
-[Operations](#operations)
+## Installation
 
-[Credentials](#credentials)
+In n8n, open **Settings > Community Nodes**, click **Install** and enter `n8n-nodes-zapperhub`.
+See the [community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/).
 
-[Compatibility](#compatibility)
+## Credentials
 
-[Usage](#usage)
+Each credential is one ZapperHub instance (one connected number). In the
+[ZapperHub panel](https://app.zapperhub.com), open **Instances** and copy:
 
-[Resources](#resources)
+- **Instance ID**, for example `inst_abcdefg123456`
+- **API Key** of the instance
 
-[Version history](#version-history)
+## Nodes
 
-## Instalação
+### ZapperHub Trigger
 
-Siga as [instruções de instalação](https://docs.n8n.io/integrations/community-nodes/installation/) na documentação de community nodes do n8n.
+Starts the workflow when an event happens in the instance. When the workflow is published, or when
+you listen for a test event, the node creates a webhook in the instance with the events you chose.
+It removes the webhook when the workflow stops.
 
-## Operações suportadas
+- Every delivery is checked against the `x-webhook-signature` header (HMAC-SHA256 with the API key).
+  Deliveries without a valid signature get `401`.
+- **Ignore Messages Sent by Me** is on by default, so a workflow that replies does not trigger itself.
+- ZapperHub only accepts HTTPS webhook URLs, so n8n must be reachable from the internet.
 
-- Obter conexão
-- Enviar mensagens de texto, áudio, mídia, contatos, stickers, localização, botões, listas e carrosséis
-- Criar/Editar/Listar/Exibir grupos
-- Editar/Visualizar dados do perfil
+Events: message received or sent, message status, message error, message edited or deleted, connection
+update, call update, group participants update, marketing preference change, contact identity change,
+template sync finished, storage failed or recovered, Instagram comment, Instagram token expired or
+refresh failed.
 
-## Credenciais
+### ZapperHub
 
-É necessário preencher as credenciais de acesso de sua instância para poder utilizar a ZapperAPI no n8n.
-Verifique o id da instância e a chave de API (X-Api-Key) no painel de visualização de instâncias.
+| Resource | Operations |
+| --- | --- |
+| Message | Send text, media, audio, sticker, location, contact, buttons, list, carousel, template, PIX charge, text as voice; react; mark as read; delete; get many; get delivery receipts; check the 24-hour service window |
+| Call | Make, play audio, hang up, reject, get, get many, get and request call permission |
+| Chat | Archive, unarchive, mute, pin, delete |
+| Contact | Check numbers, get, get profile picture, get phone number from LID, block, unblock, get blocked, get marketing opt-outs, set marketing preference, delete data |
+| Group | Get, get many, update participants |
+| Template | Get, get many, sync with Meta, get sync status |
+| Instagram | Reply privately to a comment, comment on a post, get post, get many posts |
+| Channel | Get many |
+| Profile | Update picture, remove picture, update about |
+| Connection | Get (status, QR Code or pairing code) |
 
-## Compatibilidade
+Media, audio and sticker accept a URL, a base64 file or a binary file from a previous node. Messages
+sent by the node carry `trackSource: "n8n"` in the message log and in the webhook events.
 
-Compatível com n8n 1.121 e 2.0
+The node can be used as a tool by the n8n AI Agent.
 
-## Documentação
+## Compatibility
 
-* [Documentação do n8n](https://docs.n8n.io/integrations/#community-nodes)
-* [Documentacão da ZapperAPI](https://docs.zapperapi.com/integrations/n8n)
+Tested with n8n 2.48.
+
+## Resources
+
+- [ZapperHub documentation](https://docs.zapperhub.com)
+- [API reference](https://docs.zapperhub.com/api-reference)
+- [Webhook events](https://docs.zapperhub.com/integrations/webhooks)
+- [n8n community nodes](https://docs.n8n.io/integrations/#community-nodes)
