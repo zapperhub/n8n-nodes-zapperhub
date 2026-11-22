@@ -1,0 +1,50 @@
+# Publishes the package to npm, with an npm provenance statement, on every version tag.
+#
+# n8n requires community nodes to be published from GitHub Actions with provenance
+# (since 2026-05-01). Release locally with `npm run release`: it lints, builds, bumps the
+# version, updates the changelog, commits, tags and pushes. The tag starts this workflow.
+#
+# npm authentication:
+#   - First version: set the NPM_TOKEN secret (npm granular token with read and write
+#     access to packages), because Trusted Publishing needs the package to exist.
+#   - Then: npmjs.com > package settings > Trusted Publishers > GitHub Actions,
+#     owner zapperhub, repository n8n-nodes-zapperhub, workflow publish.yml.
+#     Delete the NPM_TOKEN secret afterwards.
+
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+
+    permissions:
+      # Mints the OIDC token for the provenance statement and for Trusted Publishing.
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Release
+        # Inside GitHub Actions, `npm run release` lints, builds and runs
+        # `npm publish` with provenance.
+        run: |
+          [ -n "$NPM_TOKEN" ] && npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
+          npm run release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -11,7 +11,7 @@ export class ZapperHubApi implements ICredentialType {
 
 	displayName = 'ZapperHub API';
 
-	icon: Icon = 'file:zapperhub.svg';
+	icon: Icon = { light: 'file:zapperhub.svg', dark: 'file:zapperhub.dark.svg' };
 
 	documentationUrl = 'https://docs.zapperhub.com/quickstart';
 

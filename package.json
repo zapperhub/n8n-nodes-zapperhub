@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-zapperhub",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "n8n nodes for ZapperHub: the WhatsApp API for messages and voice calls, on the official Meta connection or by QR Code",
   "license": "MIT",
   "homepage": "https://zapperhub.com/n8n",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zapperapi/n8n-nodes-zapperhub.git"
+    "url": "https://github.com/zapperhub/n8n-nodes-zapperhub.git"
   },
   "scripts": {
     "build": "n8n-node build",
@@ -44,7 +44,7 @@
     ]
   },
   "devDependencies": {
-    "@n8n/node-cli": "*",
+    "@n8n/node-cli": "0.57.4",
     "@types/node": "^22.19.1",
     "eslint": "9.32.0",
     "prettier": "3.6.2",

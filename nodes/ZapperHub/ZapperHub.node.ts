@@ -17,7 +17,7 @@ export class ZapperHub implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'ZapperHub',
 		name: 'zapperHub',
-		icon: 'file:zapperhub.svg',
+		icon: { light: 'file:zapperhub.svg', dark: 'file:zapperhub.dark.svg' },
 		group: ['output'],
 		version: 1,
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',

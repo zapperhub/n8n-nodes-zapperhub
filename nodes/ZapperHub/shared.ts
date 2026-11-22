@@ -156,7 +156,6 @@ export function operationSelector(
 		noDataExpression: true,
 		displayOptions: { show: { resource: [resource] } },
 		options: [...operations].sort((a, b) => a.name.localeCompare(b.name)),
-		// eslint-disable-next-line n8n-nodes-base/node-param-default-wrong-for-options
 		default: defaultOperation,
 	};
 }

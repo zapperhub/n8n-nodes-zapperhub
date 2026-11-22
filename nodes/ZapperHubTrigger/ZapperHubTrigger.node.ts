@@ -11,12 +11,31 @@ import type {
 } from 'n8n-workflow';
 import { NodeApiError, NodeConnectionTypes } from 'n8n-workflow';
 
+function isNotFound(error: unknown): boolean {
+	const err = error as {
+		httpCode?: string;
+		status?: number;
+		response?: { status?: number };
+		cause?: { response?: { status?: number } };
+	};
+	return (
+		err.httpCode === '404' ||
+		err.status === 404 ||
+		err.response?.status === 404 ||
+		err.cause?.response?.status === 404
+	);
+}
+
+/**
+ * Calls the ZapperHub API of the instance. Returns `undefined` when the resource does not exist
+ * (404), for example a webhook that was removed in the panel.
+ */
 async function zapperHubRequest(
 	this: IHookFunctions,
 	method: IHttpRequestMethods,
 	path: string,
 	body?: IDataObject,
-): Promise<IDataObject> {
+): Promise<IDataObject | undefined> {
 	const credentials = await this.getCredentials('zapperHubApi');
 	try {
 		return (await this.helpers.httpRequestWithAuthentication.call(this, 'zapperHubApi', {
@@ -26,13 +45,9 @@ async function zapperHubRequest(
 			json: true,
 		})) as IDataObject;
 	} catch (error) {
+		if (isNotFound(error)) return undefined;
 		throw new NodeApiError(this.getNode(), error as JsonObject);
 	}
-}
-
-function isNotFound(error: unknown): boolean {
-	const err = error as { httpCode?: string; cause?: { response?: { status?: number } } };
-	return err.httpCode === '404' || err.cause?.response?.status === 404;
 }
 
 function sameEvents(a: unknown, b: string[]): boolean {
@@ -56,13 +71,11 @@ function isSignedByZapperHub(this: IWebhookFunctions, apiKey: string): boolean {
 	return expected.length === received.length && timingSafeEqual(expected, received);
 }
 
-// A trigger starts workflows; it is not a tool an AI agent can call.
-// eslint-disable-next-line @n8n/community-nodes/node-usable-as-tool
 export class ZapperHubTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'ZapperHub Trigger',
 		name: 'zapperHubTrigger',
-		icon: 'file:zapperhub.svg',
+		icon: { light: 'file:zapperhub.svg', dark: 'file:zapperhub.dark.svg' },
 		group: ['trigger'],
 		version: 1,
 		subtitle: '={{$parameter["events"].join(", ")}}',
@@ -212,15 +225,12 @@ export class ZapperHubTrigger implements INodeType {
 				const url = this.getNodeWebhookUrl('default') as string;
 				const events = this.getNodeParameter('events') as string[];
 				const path = `/webhooks/${encodeURIComponent(webhookId)}`;
-				try {
-					const { webhook } = (await zapperHubRequest.call(this, 'GET', path)) as {
-						webhook?: IDataObject;
-					};
-					if (webhook?.url === url && sameEvents(webhook.subscriptions, events)) return true;
+				const found = await zapperHubRequest.call(this, 'GET', path);
+				const webhook = found?.webhook as IDataObject | undefined;
+				if (webhook) {
+					if (webhook.url === url && sameEvents(webhook.subscriptions, events)) return true;
 					// Same webhook, other URL or events: replace it.
 					await zapperHubRequest.call(this, 'DELETE', path);
-				} catch (error) {
-					if (!isNotFound(error)) throw error;
 				}
 				delete staticData.webhookId;
 				return false;
@@ -232,11 +242,12 @@ export class ZapperHubTrigger implements INodeType {
 				const workflowName = this.getWorkflow().name ?? this.getWorkflow().id ?? 'workflow';
 				// ZapperHub posts a webhook.test event to the URL before it creates the webhook.
 				// webhook() answers it without starting the workflow.
-				const { webhook } = (await zapperHubRequest.call(this, 'POST', '/webhooks', {
+				const created = await zapperHubRequest.call(this, 'POST', '/webhooks', {
 					name: `n8n: ${workflowName}`,
 					url,
 					subscriptions: events,
-				})) as { webhook?: IDataObject };
+				});
+				const webhook = created?.webhook as IDataObject | undefined;
 				if (!webhook?.id) return false;
 				this.getWorkflowStaticData('node').webhookId = webhook.id;
 				return true;
@@ -246,15 +257,8 @@ export class ZapperHubTrigger implements INodeType {
 				const staticData = this.getWorkflowStaticData('node');
 				const webhookId = staticData.webhookId as string | undefined;
 				if (webhookId) {
-					try {
-						await zapperHubRequest.call(
-							this,
-							'DELETE',
-							`/webhooks/${encodeURIComponent(webhookId)}`,
-						);
-					} catch (error) {
-						if (!isNotFound(error)) return false;
-					}
+					// A webhook already removed in the panel answers 404, which counts as removed.
+					await zapperHubRequest.call(this, 'DELETE', `/webhooks/${encodeURIComponent(webhookId)}`);
 				}
 				delete staticData.webhookId;
 				return true;
