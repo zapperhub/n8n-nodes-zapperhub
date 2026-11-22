@@ -17,6 +17,8 @@ on:
   push:
     tags:
       - '*.*.*'
+  # Fallback: run it by hand for a tag, e.g. gh workflow run publish.yml --ref 2.0.1
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -34,7 +36,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
+          node-version: '24' # n8n-workflow pulls isolated-vm, which does not build on Node 26
           cache: 'npm'
 
       - name: Install dependencies
