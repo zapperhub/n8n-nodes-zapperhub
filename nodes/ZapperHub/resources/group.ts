@@ -80,8 +80,11 @@ export const groupDescription: INodeProperties[] = [
 				name: 'Update Participants',
 				value: 'updateParticipants',
 				action: 'Add remove promote or demote participants',
+				description:
+					'Outputs one item per participant. Check `success` in each item: WhatsApp can reject a part of the list.',
 				routing: {
 					request: { method: 'PATCH', url: `=/groups/${pathParam('groupId')}/participants` },
+					output: splitInto('participants'),
 				},
 			},
 			{
