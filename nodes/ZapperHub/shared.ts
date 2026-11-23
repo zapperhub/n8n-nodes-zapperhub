@@ -125,6 +125,15 @@ export const humanAgentOption = bodyOption({
 		'Whether the message is a reply from a human agent. Instagram only: it lets you reply up to 7 days after the last message of the contact. Meta does not allow it in automated messages.',
 });
 
+export const groupStatusOption = bodyOption({
+	displayName: 'Group Status',
+	name: 'groupStatus',
+	type: 'boolean',
+	default: false,
+	description:
+		'Whether to post the message as a status of the group, which only the participants of the group see. Requires a group recipient and a QR Code instance. Not available with Quoted Message or with documents.',
+});
+
 /** The "Options" collection of an operation. Options are sorted by display name. */
 export function optionsCollection(
 	displayOptions: IDisplayOptions,

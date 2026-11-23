@@ -13,6 +13,7 @@ import {
 	bodyOption,
 	commaList,
 	delayOption,
+	groupStatusOption,
 	humanAgentOption,
 	operationSelector,
 	optionsCollection,
@@ -275,6 +276,7 @@ export const messageDescription: INodeProperties[] = [
 			],
 			default: 'none',
 		}),
+		groupStatusOption,
 		humanAgentOption,
 		bodyOption(
 			{
@@ -362,6 +364,7 @@ export const messageDescription: INodeProperties[] = [
 			default: '',
 			description: 'Name of the file shown to the contact. Documents only.',
 		}),
+		groupStatusOption,
 		humanAgentOption,
 		bodyOption({
 			displayName: 'MIME Type',
@@ -388,7 +391,13 @@ export const messageDescription: INodeProperties[] = [
 			description: 'Public URL (HTTP or HTTPS), base64 file or base64 data URL. MP3, MP4, WAV or OGG.',
 		}),
 	),
-	optionsCollection(show('sendAudio'), [delayOption, humanAgentOption, quotedMessageOption, trackIdOption]),
+	optionsCollection(show('sendAudio'), [
+		delayOption,
+		groupStatusOption,
+		humanAgentOption,
+		quotedMessageOption,
+		trackIdOption,
+	]),
 
 	// Send Sticker
 	...fileSourceFields(

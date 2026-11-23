@@ -61,6 +61,10 @@ refresh failed.
 Media, audio and sticker accept a URL, a base64 file or a binary file from a previous node. Messages
 sent by the node carry `trackSource: "n8n"` in the message log and in the webhook events.
 
+Send Text, Send Media (image, video and audio) and Send Audio have the Group Status option. It posts
+the message as a status of the group, which only the participants of the group see. QR Code instances
+only.
+
 The node can be used as a tool by the n8n AI Agent.
 
 ## Compatibility
