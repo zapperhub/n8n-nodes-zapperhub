@@ -136,9 +136,22 @@ export class ZapperHubTrigger implements INodeType {
 						description: 'Participants joined, left, were promoted or demoted (QR Code connection)',
 					},
 					{
+						name: 'Group Update',
+						value: 'groups.update',
+						description:
+							'The name, description, picture, settings or invite link of a group changed (QR Code connection)',
+					},
+					{
+						name: 'Joined Group',
+						value: 'groups.upsert',
+						description:
+							'The number started to participate in a group: created, added or joined with an invite (QR Code connection)',
+					},
+					{
 						name: 'Marketing Preference Change',
 						value: 'contacts.preference',
-						description: 'A contact opted out of, or back into, marketing messages (official connection)',
+						description:
+							'A contact opted out of, or back into, marketing messages (official connection)',
 					},
 					{
 						name: 'Message Edited or Deleted',
