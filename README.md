@@ -50,7 +50,7 @@ refresh failed.
 | Call | Make, play audio, hang up, reject, get, get many, get and request call permission |
 | Chat | Archive, unarchive, mute, pin, delete |
 | Contact | Check numbers, get, get profile picture, get phone number from LID, block, unblock, get blocked, get marketing opt-outs, set marketing preference, delete data |
-| Group | Get, get many, update participants |
+| Group | Create, get, get many, update name and description, update and remove picture, get and reset invite link, update participants. QR Code instances only. |
 | Template | Get, get many, sync with Meta, get sync status |
 | Instagram | Reply privately to a comment, comment on a post, get post, get many posts |
 | Channel | Get many |
