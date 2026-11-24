@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-zapperhub",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "n8n nodes for ZapperHub: the WhatsApp API for messages and voice calls, on the official Meta connection or by QR Code",
   "license": "MIT",
   "homepage": "https://zapperhub.com/n8n",
