@@ -116,6 +116,23 @@ export class ZapperHubTrigger implements INodeType {
 							'A call was received, answered or ended. On the official connection, subscribing turns on calling for the number at Meta.',
 					},
 					{
+						name: 'Channel Followed or Created',
+						value: 'newsletters.upsert',
+						description:
+							'The account created or started following a channel (QR Code connection)',
+					},
+					{
+						name: 'Channel Mute Change',
+						value: 'newsletters.update',
+						description: 'The account muted or unmuted a channel (QR Code connection)',
+					},
+					{
+						name: 'Channel Unfollowed or Deleted',
+						value: 'newsletters.delete',
+						description:
+							'The account stopped following a channel, or the channel was deleted (QR Code connection)',
+					},
+					{
 						name: 'Comment Received (Instagram)',
 						value: 'comments.upsert',
 						description: 'Someone commented on a post of the Instagram account',

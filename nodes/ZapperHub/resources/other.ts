@@ -6,27 +6,7 @@ import {
 	optionsCollection,
 	queryOption,
 	showFor,
-	splitInto,
 } from '../shared';
-
-export const channelDescription: INodeProperties[] = [
-	operationSelector(
-		'channel',
-		[
-			{
-				name: 'Get Many',
-				value: 'getMany',
-				action: 'Get many channels',
-				description: 'List the WhatsApp channels (newsletters) the account follows or owns',
-				routing: {
-					request: { method: 'GET', url: '/newsletters' },
-					output: splitInto('newsletters'),
-				},
-			},
-		],
-		'getMany',
-	),
-];
 
 export const profileDescription: INodeProperties[] = [
 	operationSelector(

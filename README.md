@@ -38,7 +38,8 @@ It removes the webhook when the workflow stops.
 - ZapperHub only accepts HTTPS webhook URLs, so n8n must be reachable from the internet.
 
 Events: message received or sent, message status, message error, message edited or deleted, connection
-update, call update, group participants update, marketing preference change, contact identity change,
+update, call update, group participants update, channel followed or created, channel mute change,
+channel unfollowed or deleted, marketing preference change, contact identity change,
 template sync finished, storage failed or recovered, Instagram comment, Instagram token expired or
 refresh failed.
 
@@ -54,7 +55,7 @@ refresh failed.
 | Community | Create, get many, get groups, create group, link and unlink group, get participants. QR Code instances only. |
 | Template | Get, get many, sync with Meta, get sync status |
 | Instagram | Reply privately to a comment, comment on a post, get post, get many posts |
-| Channel | Get many |
+| Channel | Create, get, get many, get invite info, follow, unfollow, mute and unmute, update name and description, update and remove picture, delete, get followers, get admins, invite admin, revoke and accept admin invite, remove admin, transfer ownership, pin and unpin message, get insights, send poll, send question. QR Code instances only. |
 | Profile | Update picture, remove picture, update about |
 | Connection | Get (status, QR Code or pairing code) |
 

@@ -986,7 +986,8 @@ export const messageDescription: INodeProperties[] = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'The chat of the message: phone number, LID or group ID (remoteJid in the webhook)',
+		description:
+			'The chat of the message: phone number, LID, group ID or channel ID ending in @newsletter (remoteJid in the webhook)',
 	}),
 	bodyField(show('react'), {
 		displayName: 'Message ID',
@@ -1004,6 +1005,17 @@ export const messageDescription: INodeProperties[] = [
 		default: '',
 		placeholder: '👍',
 	}),
+	optionsCollection(show('react'), [
+		bodyOption({
+			displayName: 'Server ID',
+			name: 'serverId',
+			type: 'number',
+			typeOptions: { minValue: 1, numberPrecision: 0 },
+			default: 1,
+			description:
+				'Server ID of the channel message (serverId in the messages.upsert webhook event). Required when the chat is a channel, ignored for the other chats.',
+		}),
+	]),
 
 	// Mark as Read
 	bodyField(show('markAsRead'), {
